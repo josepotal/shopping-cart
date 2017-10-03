@@ -9,16 +9,19 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var passport = require('passport');
 var flash = require('connect-flash');
-var validator = require('express-validator')
+var validator = require('express-validator');
+var MongoStore = require('connect-mongo')(session);
 
+// routes required
 var index = require('./routes/index');
 var user = require('./routes/user');
 
+//express app
 var app = express();
 
 //mongoose.connect('mongodb://localhost/shopping')
 //docker for windows localhost= 192.168.99.100
-mongoose.connect('mongodb://192.168.99.100/shopping')
+mongoose.connect('mongodb://localhost/shopping')
 
 require('./config/passport')
 
@@ -33,7 +36,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(validator());
 app.use(cookieParser());
-app.use(session({secret: 'mysecret', resave: false, saveUninitialized: false}))
+app.use(session({
+  secret: 'mysecret',
+  resave: false,
+  saveUninitialized: false,
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  cookie: { maxAge: 180 * 60 * 1000 }
+}));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -41,10 +50,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next){
   res.locals.login = req.isAuthenticated();
+  res.locals.session = req.session;
   next();
 });
 
-
+// rotues
 app.use('/', index);
 app.use('/user', user);
 

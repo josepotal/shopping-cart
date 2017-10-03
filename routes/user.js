@@ -8,6 +8,8 @@ var Product = require('../models/product');
 var csrfProtection = csrf();
 router.use(csrfProtection);
 
+
+// apply isLoggedIn middleware to each route
 router.get('/profile', isLoggedIn, function(req, res, next){
   res.render('user/profile')
 })
@@ -17,6 +19,7 @@ router.get('/logout', isLoggedIn, function(req, res, next){
   res.redirect('/')
 })
 
+// apply middleware notLoggedIn to all the below routes
 router.use('/', notLoggedIn, function(req, res, next){
   next();
 })
@@ -44,6 +47,8 @@ router.post('/signin', passport.authenticate('local.signin', {
 
 module.exports = router;
 
+
+// middleware for logged in
 function isLoggedIn(req, res, next) {
   if(req.isAuthenticated()){
     return next()
@@ -51,6 +56,7 @@ function isLoggedIn(req, res, next) {
   res.redirect('/')
 }
 
+// middleware for not logged in
 function notLoggedIn(req, res, next) {
   if(!req.isAuthenticated()){
     return next()

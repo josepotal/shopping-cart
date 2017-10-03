@@ -12,6 +12,7 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
+//create a local Strategy called signup
 passport.use('local.signup', new LocalStrategy({
   usernameField: 'email',
   passwordField: 'password',
@@ -46,7 +47,7 @@ passport.use('local.signup', new LocalStrategy({
   })
 }));
 
-
+//create a local Strategy called signin
 passport.use('local.signin', new LocalStrategy({
   usernameField: 'email',
   passwordField: 'password',
