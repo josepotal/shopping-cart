@@ -2,7 +2,8 @@ var Product = require('../models/product');
 
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/shopping')
+//docker for windows localhost= 192.168.99.100
+mongoose.connect('mongodb://192.168.99.100/shopping')
 
 var products = [
   new Product({
