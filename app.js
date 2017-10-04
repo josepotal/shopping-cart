@@ -13,7 +13,7 @@ var validator = require('express-validator');
 var MongoStore = require('connect-mongo')(session);
 
 // routes required
-var index = require('./routes/index');
+var home = require('./routes/home');
 var user = require('./routes/user');
 
 //express app
@@ -22,7 +22,6 @@ var app = express();
 //mongoose.connect('mongodb://localhost/shopping')
 //docker for windows localhost= 192.168.99.100
 mongoose.connect('mongodb://localhost/shopping')
-
 require('./config/passport')
 
 // view engine setup
@@ -54,8 +53,8 @@ app.use(function(req, res, next){
   next();
 });
 
-// rotues
-app.use('/', index);
+// routes
+app.use('/', home);
 app.use('/user', user);
 
 
